@@ -29,7 +29,7 @@ rm -Rf /QAT/FETCH
 chown -R root:root  /QAT
 ./configure --enable-kapi
 make
-checkinstall -y -d --type -D --install=no --pkgname "QAT" --pakdir "/"
+checkinstall -y -d --type -D --install=no --pkgname "zfs-modules-QAT" --pakdir "/"
 cd -
 
 apt -qyy install zfs-dkms
@@ -47,3 +47,4 @@ dpkg -I zfs-modules-${KERNEL_VERSION}_*
 
 mkdir /root/zfs-deb
 cp zfs-modules-${KERNEL_VERSION}_* /
+ls -l /
