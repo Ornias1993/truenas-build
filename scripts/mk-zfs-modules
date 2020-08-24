@@ -6,6 +6,7 @@ db_set zfs-dkms/note-incompatible-licenses "true"
 #KERNEL_VERSION=4.19.0-5-amd64 # could be a Jenkins parameter
 KERNEL_VERSION=$(dpkg --get-selections | grep -e "^linux-image-[0-9]" | awk '{print $1}' | sed 's|linux-image-||g')
 export KERNEL_SOURCE_ROOT=/lib/modules/${KERNEL_VERSION}/build
+export ICP_ROOT=/QAT
 
 apt -qyy install \
 	linux-image-${KERNEL_VERSION} \
@@ -14,6 +15,7 @@ apt -qyy install \
 	wget \
 	pkg-config \
 	git \
+	checkinstall \
 	libudev-dev
 	
 # Setup QAT driver
@@ -25,9 +27,9 @@ tar zxvf /QAT/FETCH/qat.tar.gz -C /QAT
 git apply FETCH/0001-timespec.patch
 rm -Rf /QAT/FETCH
 chown -R root:root  /QAT
-export ICP_ROOT=/QAT
 ./configure --enable-kapi
 make
+checkinstall -y -d --type -D --install=no --pkgname "QAT" --pakdir "/"
 cd -
 
 apt -qyy install zfs-dkms
